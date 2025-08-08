@@ -6,7 +6,7 @@ import { CreateUserDTO, UpdateUserDTO } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { Payload } from './security/payload.interface';
 
-const relations = ['diaries', 'mory'];
+const relations = ['family'];
 
 @Injectable()
 export class UserService {
@@ -38,6 +38,10 @@ export class UserService {
   async update(id: number, updateDto: UpdateUserDTO) {
     // pwd 업데이트 필요시 암호화
     return await this.userRepo.update(id, updateDto);
+  }
+
+  async save(user: User) {
+    return await this.userRepo.save(user);
   }
 
   async delete(id: number) {

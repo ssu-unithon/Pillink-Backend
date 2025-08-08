@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Query } from '@nestjs/common';
+import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
 import { PillAPIService } from './pill.api.service';
 
 @Controller('pill')
@@ -7,7 +7,12 @@ export class PillController {
   private readonly logger = new Logger('Pill');
 
   @Get('search')
-  test(@Query('itemName') itemName: string, @Query('pageNo') pageNo: number) {
-    return this.pillApiService.findByItemName(pageNo ?? 1, itemName);
+  search(@Query('itemName') itemName: string, @Query('pageNo') pageNo: number) {
+    return this.pillApiService.findByItemName(pageNo, itemName);
+  }
+
+  @Get('item/:itemSeq')
+  async info(@Param('itemSeq') itemSeq: number) {
+    return this.pillApiService.findOne(itemSeq);
   }
 }

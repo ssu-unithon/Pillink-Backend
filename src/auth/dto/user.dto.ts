@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { IsNotEmpty } from 'class-validator';
 import { Provider } from '../entity/user.entity';
+import { Family } from 'src/family/entity/family.entity';
 export class CreateUserDTO {
   @IsNotEmpty()
   name: string;
@@ -13,7 +14,8 @@ export class CreateUserDTO {
 }
 
 export interface UpdateUserDTO {
-  name: string;
+  name?: string;
+  family?: Family;
 }
 
 export interface LoginUserDTO {

@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import axios from 'axios';
 
 const API_URL =
@@ -55,7 +59,7 @@ export class PillAPIService {
     const params = new URLSearchParams();
     params.append('ServiceKey', process.env.PILL_API_KEY as string);
     params.append('numOfRows', numOfRows.toString());
-    params.append('pageNo', pageNo.toString());
+    params.append('pageNo', (pageNo ?? 1).toString());
     params.append('type', 'json');
     for (const [key, value] of Object.entries(options)) {
       // undefined 또는 빈 문자열 제외 (빈문자열도 서버에 따라 다름, 필요시 조절)
@@ -76,8 +80,20 @@ export class PillAPIService {
   }
 
   findByItemName(pageNo: number, itemName: string) {
-    return this.request(pageNo, {
-      itemName,
-    });
+    return this.request(pageNo, { itemName });
+  }
+
+  /** 품목기준코드(id)로 검색 */
+  findByItemSeq(pageNo: number, itemSeq: number) {
+    return this.request(pageNo, { itemSeq: itemSeq.toString() });
+  }
+
+  async findOne(itemSeq: number): Promise<PillInfo> {
+    const response = await this.findByItemSeq(1, itemSeq);
+    if (response.totalCount < 1)
+      throw new NotFoundException(
+        `품목기준코드가 '${itemSeq}'인 아이템은 존재하지 않습니다`,
+      );
+    return response.items[0];
   }
 }
