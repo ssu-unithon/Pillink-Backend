@@ -21,9 +21,37 @@ interface APIOptions {
   updateDe?: string;
 }
 
+export interface PillInfo {
+  entpName: string;
+  itemName: string;
+  itemSeq: string;
+  efcyQesitm: string;
+  useMethodQesitm: string;
+  atpnWarnQesitm: string | null;
+  atpnQesitm: string;
+  intrcQesitm: string;
+  seQesitm: string;
+  depositMethodQesitm: string;
+  openDe: string; // ISO date string
+  updateDe: string; // ISO date string
+  itemImage: string | null;
+  bizrno: string;
+}
+
+export interface APIResponse {
+  pageNo: number;
+  totalCount: number;
+  numOfRows: number;
+  items: PillInfo[];
+}
+
 @Injectable()
 export class PillAPIService {
-  request(pageNo: number, options: APIOptions) {
+  /**pageNo: number,
+    totalCount: number,
+    numOfRows: number,
+    items: item[] */
+  request(pageNo: number, options: APIOptions): Promise<APIResponse> {
     const params = new URLSearchParams();
     params.append('ServiceKey', process.env.PILL_API_KEY as string);
     params.append('numOfRows', numOfRows.toString());
@@ -39,7 +67,7 @@ export class PillAPIService {
 
     return axios
       .get(url)
-      .then((response) => response.data)
+      .then((response) => response.data.body as APIResponse)
       .catch((error) => {
         throw new BadRequestException(
           `API 요청 실패: ${error.response?.status} ${error.response?.statusText}`,

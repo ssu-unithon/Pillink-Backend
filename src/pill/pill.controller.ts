@@ -6,8 +6,8 @@ export class PillController {
   constructor(private pillApiService: PillAPIService) {}
   private readonly logger = new Logger('Pill');
 
-  @Get()
-  test(@Query('itemName') itemName: string) {
-    return this.pillApiService.findByItemName(1, itemName);
+  @Get('search')
+  test(@Query('itemName') itemName: string, @Query('pageNo') pageNo: number) {
+    return this.pillApiService.findByItemName(pageNo ?? 1, itemName);
   }
 }
