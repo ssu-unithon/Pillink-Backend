@@ -49,8 +49,7 @@ export class FamilyService {
     const family = await this.findOne({ id: user.family.id });
     if (!family) throw new BadRequestException('소속된 가족이 없습니다');
 
-    const index = family.users.indexOf(user);
-    if (index !== -1) family.users.splice(index, 1);
+    family.users = family.users.filter((u) => u.id !== user.id);
 
     user.family = null;
     await this.userService.save(user);
@@ -64,5 +63,14 @@ export class FamilyService {
       family.manager = family.users[0];
     console.log(family);
     return await this.repo.save(family);
+  }
+
+  async insert(userId: number, targetUserId: number) {
+    const family = await this.findByUID(userId);
+    const targetUser = await this.userService.findOne({ id: targetUserId });
+    if (!targetUser)
+      throw new BadRequestException('초대할 사용자의 정보가 존재하지 않습니다');
+    family.users.push(targetUser);
+    return this.repo.save(family);
   }
 }
