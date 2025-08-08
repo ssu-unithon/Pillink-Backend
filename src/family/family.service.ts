@@ -38,7 +38,7 @@ export class FamilyService {
       manager: user,
       users: [user],
     });
-    this.logger.log(`${user.email} 새로운 가족 생성`);
+    this.logger.verbose(`${user.email} 새로운 가족 생성`);
     await this.userService.update(user.id, { family });
     return family;
   }
@@ -53,15 +53,15 @@ export class FamilyService {
 
     user.family = null;
     await this.userService.save(user);
-    console.log(user);
-    this.logger.log(`${user.email} '${family.name}' 탈퇴`);
-    if (family.users.length == 0)
-      // 사용자가 남아 있지 않으면 제거
+    this.logger.verbose(`${user.email} '${family.name}' 탈퇴`);
+    if (family.users.length == 0) {
+      // 사용자가 남아 있지 않으면 삭제
+      this.logger.verbose(`'${family.name}' 삭제`);
       return await this.repo.remove(family);
+    }
     if (family.manager.id == user.id)
       // 나간 사람이 관리자 였다면, 다른 사람을 관리자로 임명
       family.manager = family.users[0];
-    console.log(family);
     return await this.repo.save(family);
   }
 
@@ -71,6 +71,7 @@ export class FamilyService {
     if (!targetUser)
       throw new BadRequestException('초대할 사용자의 정보가 존재하지 않습니다');
     family.users.push(targetUser);
+    this.logger.verbose(`'${family.name}' ${targetUser.name} 추가`);
     return this.repo.save(family);
   }
 }

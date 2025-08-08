@@ -1,5 +1,12 @@
 import { Family } from 'src/family/entity/family.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Pill } from 'src/pill/entity/pill.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum Role {
   USER = 'user',
@@ -33,4 +40,7 @@ export class User {
 
   @ManyToOne(() => Family, (family) => family.users, { nullable: true })
   family: Family | null;
+
+  @OneToMany(() => Pill, (pill) => pill.user, { nullable: true })
+  owned_pilles: Pill | null;
 }

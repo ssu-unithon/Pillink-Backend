@@ -7,6 +7,7 @@ import { User } from './auth/entity/user.entity';
 import { PillModule } from './pill/pill.module';
 import { FamilyModule } from './family/family.module';
 import { Family } from './family/entity/family.entity';
+import { Pill } from './pill/entity/pill.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { Family } from './family/entity/family.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Family],
+      entities: [User, Family, Pill],
       synchronize: true,
     }),
     AuthModule,
