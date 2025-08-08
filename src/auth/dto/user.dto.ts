@@ -7,8 +7,6 @@ export class CreateUserDTO {
   @IsNotEmpty()
   email: string;
   @IsNotEmpty()
-  mbti: string;
-  @IsNotEmpty()
   password: string;
   @IsNotEmpty()
   provider: Provider;

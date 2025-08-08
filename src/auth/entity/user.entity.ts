@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum Role {
   USER = 'user',
@@ -24,12 +30,13 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ default: 'EF' })
-  mbti: string;
-
   @Column({ type: 'enum', enum: Provider, default: Provider.LOCAL })
   provider: Provider;
 
   @Column({ type: 'enum', enum: Role, default: Role.USER })
   role: Role;
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  famliy: User[];
 }
