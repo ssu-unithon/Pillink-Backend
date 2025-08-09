@@ -1,3 +1,4 @@
+import { Alarm } from 'src/alarm/entity/alarm.entity';
 import { ChatMessage } from 'src/chat/entity/ChatMessage.entity';
 import { Family } from 'src/family/entity/family.entity';
 import { Pill } from 'src/pill/entity/pill.entity';
@@ -47,4 +48,7 @@ export class User {
 
   @OneToMany(() => ChatMessage, (chatMessage) => chatMessage.user)
   chat_messages: ChatMessage[];
+
+  @OneToMany(() => Alarm, (alarm) => alarm.user)
+  alarms: Alarm[];
 }

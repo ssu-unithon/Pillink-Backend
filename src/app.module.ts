@@ -10,6 +10,8 @@ import { Family } from './family/entity/family.entity';
 import { Pill } from './pill/entity/pill.entity';
 import { ChatModule } from './chat/chat.module';
 import { ChatMessage } from './chat/entity/ChatMessage.entity';
+import { AlarmModule } from './alarm/alarm.module';
+import { Alarm } from './alarm/entity/alarm.entity';
 
 @Module({
   imports: [
@@ -20,13 +22,14 @@ import { ChatMessage } from './chat/entity/ChatMessage.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Family, Pill, ChatMessage],
+      entities: [User, Family, Pill, ChatMessage, Alarm],
       synchronize: true,
     }),
     AuthModule,
     PillModule,
     FamilyModule,
     ChatModule,
+    AlarmModule,
   ],
   controllers: [AppController],
   providers: [AppService],
