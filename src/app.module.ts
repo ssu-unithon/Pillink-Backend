@@ -8,6 +8,8 @@ import { PillModule } from './pill/pill.module';
 import { FamilyModule } from './family/family.module';
 import { Family } from './family/entity/family.entity';
 import { Pill } from './pill/entity/pill.entity';
+import { ChatModule } from './chat/chat.module';
+import { ChatMessage } from './chat/entity/ChatMessage.entity';
 
 @Module({
   imports: [
@@ -18,12 +20,13 @@ import { Pill } from './pill/entity/pill.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Family, Pill],
+      entities: [User, Family, Pill, ChatMessage],
       synchronize: true,
     }),
     AuthModule,
     PillModule,
     FamilyModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

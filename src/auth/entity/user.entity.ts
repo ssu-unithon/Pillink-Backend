@@ -1,3 +1,4 @@
+import { ChatMessage } from 'src/chat/entity/ChatMessage.entity';
 import { Family } from 'src/family/entity/family.entity';
 import { Pill } from 'src/pill/entity/pill.entity';
 import {
@@ -43,4 +44,7 @@ export class User {
 
   @OneToMany(() => Pill, (pill) => pill.user, { nullable: true })
   owned_pills: Pill[] | null;
+
+  @OneToMany(() => ChatMessage, (chatMessage) => chatMessage.user)
+  chat_messages: ChatMessage[];
 }
