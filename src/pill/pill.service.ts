@@ -26,15 +26,15 @@ export class PillService {
     const user = await this.userService.getById(userId);
     const itemInfo = await this.apiService.findOne(itemSeq);
     // 이미 같은 약이 있디면
-    if (user.owned_pilles?.some((x) => x.itemSeq === itemSeq))
+    if (user.owned_pills?.some((x) => x.itemSeq === itemSeq))
       throw new BadRequestException('이미 해당 약을 복용하고 있습니다');
     const pill = await this.repo.save({
       user,
       name: itemInfo.itemName,
       itemSeq: itemInfo.itemSeq,
     });
-    if (!user.owned_pilles) user.owned_pilles = [pill];
-    else user.owned_pilles.push(pill);
+    if (!user.owned_pills) user.owned_pills = [pill];
+    else user.owned_pills.push(pill);
     this.userService.save(user);
     return pill;
   }

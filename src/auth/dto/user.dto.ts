@@ -2,11 +2,12 @@
 import { IsNotEmpty } from 'class-validator';
 import { Provider } from '../entity/user.entity';
 import { Family } from 'src/family/entity/family.entity';
+
 export class CreateUserDTO {
   @IsNotEmpty()
   name: string;
   @IsNotEmpty()
-  email: string;
+  phone: string;
   @IsNotEmpty()
   password: string;
   @IsNotEmpty()
@@ -19,12 +20,12 @@ export interface UpdateUserDTO {
 }
 
 export interface LoginUserDTO {
-  email: string;
+  phone: string;
   password: string;
 }
 
 export interface OAuthDTO {
-  email: string;
+  phone: string;
   name: string;
   provider: Provider;
 }

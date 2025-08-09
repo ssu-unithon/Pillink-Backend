@@ -6,7 +6,7 @@ export class Pill {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.owned_pilles)
+  @ManyToOne(() => User, (user) => user.owned_pills)
   user: User;
 
   @Column()

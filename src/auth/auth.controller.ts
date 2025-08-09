@@ -44,17 +44,17 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() loginDto: LoginUserDTO): Promise<TokenResponse> {
-    if (!loginDto.email || !loginDto.password)
+    if (!loginDto.phone || !loginDto.password)
       throw new BadRequestException(
-        '이메일 또는 비밀번호를 입력하여야 합니다.',
+        '전화번호 또는 비밀번호를 입력하여야 합니다.',
       );
-    this.logger.log(`${loginDto.email} 로그인`);
+    this.logger.log(`${loginDto.phone} 로그인`);
     return await this.authService.vaildateUser(loginDto);
   }
 
   @Post('register')
   async register(@Body() createDto: CreateUserDTO) {
-    this.logger.log(`${createDto.email} 회원가입`);
+    this.logger.log(`${createDto.phone} 회원가입`);
     return await this.authService.register(createDto);
   }
 
@@ -63,7 +63,7 @@ export class AuthController {
   async deleteMe(@Req() req: Request) {
     // 인증 추가
     const payload = req.user as Payload;
-    this.logger.log(`${payload?.email} 회원탈퇴`);
+    this.logger.log(`${payload?.phone} 회원탈퇴`);
     return await this.authService.deleteByPayload(payload);
   }
 
@@ -87,11 +87,11 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<void> {
     const user = req.user as OAuthDTO;
-    const existUser = await this.userService.findOne({ email: user.email });
+    const existUser = await this.userService.findOne({ phone: user.phone });
 
     if (!existUser) {
       // Register flow
-      const redirectUrl = `exp://192.168.45.63//--/auth/google/redirect?status=register&email=${user.email}&name=${user.name}&provider=${user.provider}`;
+      const redirectUrl = `exp://192.168.45.63//--/auth/google/redirect?status=register&email=${user.phone}&name=${user.name}&provider=${user.provider}`;
       return res.redirect(redirectUrl);
     } else {
       // Login flow

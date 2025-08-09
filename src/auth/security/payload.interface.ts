@@ -3,6 +3,6 @@ import { Role } from '../entity/user.entity';
 export interface Payload {
   id: number;
   name: string;
-  email: string;
+  phone: string;
   role: Role;
 }

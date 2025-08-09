@@ -6,7 +6,7 @@ import { CreateUserDTO, UpdateUserDTO } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { Payload } from './security/payload.interface';
 
-const relations = ['family', 'onwed_pilles'];
+const relations = ['family', 'owned_pills'];
 
 @Injectable()
 export class UserService {

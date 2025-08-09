@@ -27,7 +27,7 @@ export class User {
   name: string;
 
   @Column()
-  email: string;
+  phone: string;
 
   @Column()
   password: string;
@@ -42,5 +42,5 @@ export class User {
   family: Family | null;
 
   @OneToMany(() => Pill, (pill) => pill.user, { nullable: true })
-  owned_pilles: Pill[] | null;
+  owned_pills: Pill[] | null;
 }
