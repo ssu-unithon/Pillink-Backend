@@ -26,9 +26,10 @@ export class FamilyService {
   /** 소속된 가족이 없으면 throw */
   async findByUID(userId: number): Promise<Family> {
     const user = await this.userService.getById(userId);
-    if (!user.family) throw new BadRequestException('소속된 가족이 없습니다');
+    if (!user.family)
+      throw new BadRequestException('소속된 가족 그룹이 없습니다');
     const family = await this.findOne({ id: user.family.id });
-    if (!family) throw new BadRequestException('소속된 가족이 없습니다');
+    if (!family) throw new BadRequestException('소속된 가족 그룹이 없습니다');
     return family;
   }
 
@@ -51,9 +52,10 @@ export class FamilyService {
 
   async leave(userId: number) {
     const user = await this.userService.getById(userId);
-    if (!user.family) throw new BadRequestException('소속된 가족이 없습니다');
+    if (!user.family)
+      throw new BadRequestException('소속된 가족 그룹이 없습니다');
     const family = await this.findOne({ id: user.family.id });
-    if (!family) throw new BadRequestException('소속된 가족이 없습니다');
+    if (!family) throw new BadRequestException('소속된 가족 그룹이 없습니다');
 
     family.users = family.users.filter((u) => u.id !== user.id);
 
@@ -88,17 +90,18 @@ export class FamilyService {
   async hasRelationship(
     commanderId: number,
     orderedId: number,
+    onlyManager: boolean = true,
   ): Promise<boolean> {
     const commander = await this.userService.getById(commanderId);
     const ordered = await this.userService.getById(orderedId);
     const family = await this.findByUID(commander.id);
     // 조건 1 : 실행자는 권한을 가지고 있는가
-    if (family.manager.id !== commander.id)
+    if (onlyManager && family.manager.id !== commander.id)
       throw new ForbiddenException(
         '가족 관리자만 관리 기능에 접근할 수 있습니다',
       );
     // 조건 2 : 피실행자는 실행자와 가족 관계인가
-    if (family.id === ordered.family?.id)
+    if (family.id !== ordered.family?.id)
       throw new BadRequestException(
         '해당 사용자는 같은 그룹에 속하지 않았습니다',
       );

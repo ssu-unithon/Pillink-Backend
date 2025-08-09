@@ -37,6 +37,14 @@ export class PillController {
 
   // SECTION - Pill
   @UseGuards(LoginGuard)
+  @Get()
+  async getOwnPills(@Req() req: Request, @Query('targetId') targetId: number) {
+    const payload = req.user as Payload;
+    if (!targetId) return await this.pillService.getOwnedPills(payload.id);
+    return await this.pillService.getFamilyPills(payload.id, targetId);
+  }
+
+  @UseGuards(LoginGuard)
   @Post()
   async insertTo(
     @Req() req: Request,

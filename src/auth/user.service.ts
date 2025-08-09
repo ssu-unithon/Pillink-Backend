@@ -21,6 +21,7 @@ export class UserService {
     return await this.findOne({ id: payload.id });
   }
 
+  /** ID를 가진 유저가 없다면 throw */
   async getById(id: number): Promise<User> {
     const user = await this.findOne({ id });
     if (!user) {
