@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Family } from './entity/family.entity';
 import { Repository } from 'typeorm';
@@ -18,6 +23,7 @@ export class FamilyService {
     return await this.repo.findOne({ where, relations });
   }
 
+  /** 소속된 가족이 없으면 throw */
   async findByUID(userId: number): Promise<Family> {
     const user = await this.userService.getById(userId);
     if (!user.family) throw new BadRequestException('소속된 가족이 없습니다');
@@ -73,5 +79,25 @@ export class FamilyService {
     family.users.push(targetUser);
     this.logger.verbose(`'${family.name}' ${targetUser.name} 추가`);
     return this.repo.save(family);
+  }
+
+  async hasRelationship(
+    commanderId: number,
+    orderedId: number,
+  ): Promise<boolean> {
+    const commander = await this.userService.getById(commanderId);
+    const ordered = await this.userService.getById(orderedId);
+    const family = await this.findByUID(commander.id);
+    // 조건 1 : 실행자는 권한을 가지고 있는가
+    if (family.manager.id !== commander.id)
+      throw new ForbiddenException(
+        '가족 관리자만 관리 기능에 접근할 수 있습니다',
+      );
+    // 조건 2 : 피실행자는 실행자와 가족 관계인가
+    if (family.id === ordered.family?.id)
+      throw new BadRequestException(
+        '해당 사용자는 같은 그룹에 속하지 않았습니다',
+      );
+    return true;
   }
 }

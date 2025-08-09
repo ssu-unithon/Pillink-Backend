@@ -42,5 +42,5 @@ export class User {
   family: Family | null;
 
   @OneToMany(() => Pill, (pill) => pill.user, { nullable: true })
-  owned_pilles: Pill | null;
+  owned_pilles: Pill[] | null;
 }

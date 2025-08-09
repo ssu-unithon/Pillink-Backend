@@ -25,7 +25,7 @@ interface APIOptions {
   updateDe?: string;
 }
 
-export interface PillInfo {
+export interface ItemInfo {
   entpName: string;
   itemName: string;
   itemSeq: string;
@@ -46,7 +46,7 @@ export interface APIResponse {
   pageNo: number;
   totalCount: number;
   numOfRows: number;
-  items: PillInfo[];
+  items: ItemInfo[];
 }
 
 @Injectable()
@@ -84,11 +84,11 @@ export class PillAPIService {
   }
 
   /** 품목기준코드(id)로 검색 */
-  findByItemSeq(pageNo: number, itemSeq: number) {
-    return this.request(pageNo, { itemSeq: itemSeq.toString() });
+  findByItemSeq(pageNo: number, itemSeq: string) {
+    return this.request(pageNo, { itemSeq: itemSeq });
   }
 
-  async findOne(itemSeq: number): Promise<PillInfo> {
+  async findOne(itemSeq: string): Promise<ItemInfo> {
     const response = await this.findByItemSeq(1, itemSeq);
     if (response.totalCount < 1)
       throw new NotFoundException(
