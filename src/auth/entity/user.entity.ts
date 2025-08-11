@@ -1,6 +1,7 @@
 import { Alarm } from 'src/alarm/entity/alarm.entity';
 import { ChatMessage } from 'src/chat/entity/ChatMessage.entity';
 import { Family } from 'src/family/entity/family.entity';
+import { IntakeLog } from 'src/intake-log/entity/intake-log.entity';
 import { Pill } from 'src/pill/entity/pill.entity';
 import {
   Column,
@@ -11,14 +12,26 @@ import {
 } from 'typeorm';
 
 export enum Role {
-  USER = 'user',
-  ADMIN = 'admin',
+  OPER = '보호자',
+  ARGU = '보호 대상자',
 }
 
 export enum Provider {
   LOCAL = 'local',
   GOOGLE = 'google',
 }
+
+export type Disease =
+  | '당뇨병'
+  | '고혈압'
+  | '무릎관절증'
+  | '만성요통'
+  | '만성위염'
+  | '시력감퇴'
+  | '만성심질환'
+  | '알레르기'
+  | '전립선 비대증'
+  | '치매';
 
 @Entity()
 export class User {
@@ -34,10 +47,13 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ type: 'json', nullable: true })
+  diseases: Disease[] | null;
+
   @Column({ type: 'enum', enum: Provider, default: Provider.LOCAL })
   provider: Provider;
 
-  @Column({ type: 'enum', enum: Role, default: Role.USER })
+  @Column({ type: 'enum', enum: Role, default: Role.OPER })
   role: Role;
 
   @ManyToOne(() => Family, (family) => family.users, { nullable: true })
@@ -51,4 +67,7 @@ export class User {
 
   @OneToMany(() => Alarm, (alarm) => alarm.user)
   alarms: Alarm[];
+
+  @OneToMany(() => IntakeLog, (intake) => intake.user)
+  intake_logs: IntakeLog[];
 }

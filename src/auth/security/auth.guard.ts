@@ -21,17 +21,3 @@ export class LoginGuard extends AuthGuard('jwt') {
     return user;
   }
 }
-
-@Injectable()
-export class AdminGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
-    const request: Request = context.switchToHttp().getRequest<Request>();
-    const user = request.user as Payload;
-
-    if (!user || user.role !== Role.ADMIN) {
-      throw new ForbiddenException('관리자 권한이 필요합니다.');
-    }
-
-    return true;
-  }
-}

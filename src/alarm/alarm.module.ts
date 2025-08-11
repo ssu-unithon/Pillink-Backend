@@ -5,9 +5,15 @@ import { AuthModule } from 'src/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Alarm } from './entity/alarm.entity';
 import { FamilyModule } from 'src/family/family.module';
+import { IntakeLogModule } from 'src/intake-log/intake-log.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Alarm]), AuthModule, FamilyModule],
+  imports: [
+    TypeOrmModule.forFeature([Alarm]),
+    AuthModule,
+    FamilyModule,
+    IntakeLogModule,
+  ],
   providers: [AlarmService],
   controllers: [AlarmController],
 })

@@ -4,6 +4,7 @@ import {
   Get,
   Logger,
   Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -47,6 +48,20 @@ export class PillController {
   @UseGuards(LoginGuard)
   @Post()
   async insertTo(
+    @Req() req: Request,
+    @Body() body: { targetId: number; itemSeq: string },
+  ): Promise<Pill> {
+    const payload = req.user as Payload;
+    return await this.pillService.insertToFamily(
+      payload.id,
+      body.targetId,
+      body.itemSeq,
+    );
+  }
+
+  @UseGuards(LoginGuard)
+  @Patch()
+  async modify(
     @Req() req: Request,
     @Body() body: { targetId: number; itemSeq: string },
   ): Promise<Pill> {

@@ -8,7 +8,6 @@ import {
   Patch,
   Post,
   Req,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -20,12 +19,17 @@ import {
   UpdateUserDTO,
 } from './dto/user.dto';
 import { LoginGuard } from './security/auth.guard';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { Payload } from './security/payload.interface';
 
 interface TokenResponse {
   accessToken: string;
+}
+
+interface OAuthReturn {
+  status: 'login' | 'register';
+  value: Express.User | TokenResponse;
 }
 
 @Controller('auth')
@@ -76,28 +80,27 @@ export class AuthController {
   //SECTION - OAuth 2.0
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  googleLogin() {
-    this.logger.log(`누군가 Google Redirect 요청`);
-  }
+  async googleLogin(): Promise<void> {}
 
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
-  async googleLoginRedirect(
-    @Req() req: Request,
-    @Res() res: Response,
-  ): Promise<void> {
+  async googleLoginRedirect(@Req() req: Request): Promise<OAuthReturn> {
+    /* 
+      login : { status: 'login', value: JWT-String }
+      register : { status: 'register', value: OAuthDTO }
+    */
     const user = req.user as OAuthDTO;
     const existUser = await this.userService.findOne({ phone: user.phone });
-
     if (!existUser) {
-      // Register flow
-      const redirectUrl = `exp://192.168.45.63//--/auth/google/redirect?status=register&email=${user.phone}&name=${user.name}&provider=${user.provider}`;
-      return res.redirect(redirectUrl);
-    } else {
-      // Login flow
-      const tokenResponse = this.authService.vaildateOAuth(user, existUser);
-      const redirectUrl = `exp://192.168.45.63//--/auth/google/redirect?status=login&accessToken=${tokenResponse.accessToken}`;
-      return res.redirect(redirectUrl);
+      return {
+        status: 'register',
+        value: user,
+      };
     }
+    const tokenResponse = this.authService.vaildateOAuth(user, existUser);
+    return {
+      status: 'login',
+      value: tokenResponse,
+    };
   }
 }

@@ -12,6 +12,8 @@ import { ChatModule } from './chat/chat.module';
 import { ChatMessage } from './chat/entity/ChatMessage.entity';
 import { AlarmModule } from './alarm/alarm.module';
 import { Alarm } from './alarm/entity/alarm.entity';
+import { IntakeLogModule } from './intake-log/intake-log.module';
+import { IntakeLog } from './intake-log/entity/intake-log.entity';
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import { Alarm } from './alarm/entity/alarm.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Family, Pill, ChatMessage, Alarm],
+      entities: [User, Family, Pill, ChatMessage, Alarm, IntakeLog],
       synchronize: true,
     }),
     AuthModule,
@@ -30,6 +32,7 @@ import { Alarm } from './alarm/entity/alarm.entity';
     FamilyModule,
     ChatModule,
     AlarmModule,
+    IntakeLogModule,
   ],
   controllers: [AppController],
   providers: [AppService],
