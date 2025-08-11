@@ -11,6 +11,12 @@ export class Alarm {
   user: User;
 
   @Column()
+  name: string;
+
+  @Column()
+  count: number;
+
+  @Column()
   @Min(0)
   @Max(23)
   hour: number;

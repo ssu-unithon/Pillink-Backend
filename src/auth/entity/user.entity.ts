@@ -45,6 +45,9 @@ export class User {
   phone: string;
 
   @Column()
+  email: string;
+
+  @Column()
   password: string;
 
   @Column({ type: 'json', nullable: true })

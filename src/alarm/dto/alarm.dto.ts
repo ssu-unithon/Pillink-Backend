@@ -5,6 +5,8 @@ export interface SaveAlarmDTO {
   hour: number;
   minute: number;
   is_enabled?: boolean;
+  name: string;
+  count: number;
 }
 
 export interface CreateAlarmDTO {
@@ -12,4 +14,6 @@ export interface CreateAlarmDTO {
   hour: number;
   minute: number;
   is_enabled?: boolean;
+  name: string;
+  count: number;
 }

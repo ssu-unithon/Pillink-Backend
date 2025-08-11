@@ -37,19 +37,18 @@ export class ChatService {
     if (!content || content.replaceAll(' ', '').length < 2)
       throw new BadRequestException('내용을 입력해주세요');
     const user = await this.userService.getById(userId);
-    const message = await this.repo.save({
+    await this.repo.save({
       user,
       content,
       sender_type: 'user',
     });
     // ChatBot API
     const response = await this.apiService.question(content);
-    console.log(response);
-    /*await this.repo.save({
+    await this.repo.save({
       user,
       response,
       sender_type: 'ai',
-    });*/
+    });
     return response;
   }
 }

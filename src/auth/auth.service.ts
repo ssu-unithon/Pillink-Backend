@@ -22,7 +22,7 @@ export class AuthService {
   userToPayload(user: User): Payload {
     return {
       id: user.id,
-      phone: user.phone,
+      email: user.email,
       name: user.name,
       role: user.role,
     };
@@ -30,7 +30,7 @@ export class AuthService {
 
   async register(createDto: CreateUserDTO) {
     const existUser = await this.userService.findOne({
-      phone: createDto.phone,
+      email: createDto.email,
     });
     if (existUser)
       throw new ConflictException('이미 존재하는 전화번호 입니다.');
@@ -50,11 +50,11 @@ export class AuthService {
 
   //SECTION - vaildate
   async vaildateUser(loginDto: LoginUserDTO) {
-    const user = await this.userService.findOne({ phone: loginDto.phone });
-    // 전화번호 존재 X
+    const user = await this.userService.findOne({ email: loginDto.email });
+    // 이메일 존재 X
     if (!user)
       throw new UnauthorizedException(
-        '전화번호 또는 비밀번호가 옳바르지 않습니다.',
+        '이메일 또는 비밀번호가 옳바르지 않습니다.',
       );
     // 비밀번호 매칭 X
     const isCorrectPassword = await this.userService.comparePassword(
@@ -63,7 +63,7 @@ export class AuthService {
     );
     if (!isCorrectPassword)
       throw new UnauthorizedException(
-        '전화번호 또는 비밀번호가 옳바르지 않습니다.',
+        '이메일 또는 비밀번호가 옳바르지 않습니다.',
       );
     // JWT 발급
     const payload = this.userToPayload(user);

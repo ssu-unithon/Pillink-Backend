@@ -48,17 +48,17 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() loginDto: LoginUserDTO): Promise<TokenResponse> {
-    if (!loginDto.phone || !loginDto.password)
+    if (!loginDto.email || !loginDto.password)
       throw new BadRequestException(
-        '전화번호 또는 비밀번호를 입력하여야 합니다.',
+        '이메일 또는 비밀번호를 입력하여야 합니다.',
       );
-    this.logger.log(`${loginDto.phone} 로그인`);
+    this.logger.log(`${loginDto.email} 로그인`);
     return await this.authService.vaildateUser(loginDto);
   }
 
   @Post('register')
   async register(@Body() createDto: CreateUserDTO) {
-    this.logger.log(`${createDto.phone} 회원가입`);
+    this.logger.log(`${createDto.email} 회원가입`);
     return await this.authService.register(createDto);
   }
 
@@ -67,7 +67,7 @@ export class AuthController {
   async deleteMe(@Req() req: Request) {
     // 인증 추가
     const payload = req.user as Payload;
-    this.logger.log(`${payload?.phone} 회원탈퇴`);
+    this.logger.log(`${payload?.email} 회원탈퇴`);
     return await this.authService.deleteByPayload(payload);
   }
 
@@ -90,7 +90,7 @@ export class AuthController {
       register : { status: 'register', value: OAuthDTO }
     */
     const user = req.user as OAuthDTO;
-    const existUser = await this.userService.findOne({ phone: user.phone });
+    const existUser = await this.userService.findOne({ email: user.email });
     if (!existUser) {
       return {
         status: 'register',

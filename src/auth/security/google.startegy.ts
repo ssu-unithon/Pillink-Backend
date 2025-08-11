@@ -27,7 +27,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       throw new UnauthorizedException('이메일 정보를 가져올 수 없습니다.');
     }
     const user: OAuthDTO = {
-      phone: emails[0].value,
+      email: emails[0].value,
       name: displayName,
       provider: Provider.GOOGLE,
     };
