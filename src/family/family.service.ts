@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Family } from './entity/family.entity';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/auth/user.service';
+import { Role } from 'src/auth/entity/user.entity';
 
 const relations = ['users', 'manager'];
 
@@ -96,7 +97,7 @@ export class FamilyService {
     const ordered = await this.userService.getById(orderedId);
     const family = await this.findByUID(commander.id);
     // 조건 1 : 실행자는 권한을 가지고 있는가
-    if (onlyManager && family.manager.id !== commander.id)
+    if (onlyManager && commander.role === Role.ARGU)
       throw new ForbiddenException(
         '가족 관리자만 관리 기능에 접근할 수 있습니다',
       );

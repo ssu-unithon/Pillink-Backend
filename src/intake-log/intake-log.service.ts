@@ -16,6 +16,10 @@ export class IntakeLogService {
     return await this.repo.findOne({ where, relations });
   }
 
+  async find(where: import('typeorm').FindOptionsWhere<IntakeLog>) {
+    return await this.repo.find({ where, relations });
+  }
+
   /** intake가 없다면, 빈 기록 생성 */
   async load(userId: number, month: number, date: number) {
     const existIntake = await this.findOne({
@@ -37,18 +41,20 @@ export class IntakeLogService {
     });
   }
 
-  async confirm(
-    targetId: number,
-    month: number,
-    date: number,
-    alarmId: number,
-  ) {
+  isAllTrue(alarm_confirms: ALARM_CONFIRM[]) {
+    for (let i = 0; i < alarm_confirms.length; i++)
+      if (!alarm_confirms[i].is_checked) return false;
+    return true;
+  }
+
+  async check(targetId: number, month: number, date: number, alarmId: number) {
     const intake = await this.load(targetId, month, date);
     for (let i = 0; i < intake.alarm_confirms.length; i++)
       if (intake.alarm_confirms[i].alarmId === alarmId) {
         intake.alarm_confirms[i].is_checked = true;
         break;
       }
+    if (this.isAllTrue(intake.alarm_confirms)) intake.is_checked = true;
     return await this.repo.save(intake);
   }
 }
