@@ -41,10 +41,11 @@ export class IntakeLogService {
     });
   }
 
-  isAllTrue(alarm_confirms: ALARM_CONFIRM[]) {
+  getCheckedPercent(alarm_confirms: ALARM_CONFIRM[]) {
+    let sum = 0;
     for (let i = 0; i < alarm_confirms.length; i++)
-      if (!alarm_confirms[i].is_checked) return false;
-    return true;
+      if (alarm_confirms[i].is_checked) sum += 1;
+    return sum / alarm_confirms.length;
   }
 
   async check(targetId: number, month: number, date: number, alarmId: number) {
@@ -54,7 +55,7 @@ export class IntakeLogService {
         intake.alarm_confirms[i].is_checked = true;
         break;
       }
-    if (this.isAllTrue(intake.alarm_confirms)) intake.is_checked = true;
+    intake.chekced_percent = this.getCheckedPercent(intake.alarm_confirms);
     return await this.repo.save(intake);
   }
 }

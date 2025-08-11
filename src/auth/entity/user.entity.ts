@@ -11,10 +11,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-export enum Role {
-  OPER = '보호자',
-  ARGU = '보호 대상자',
-}
+export type Role = '보호자' | '보호 대상자';
 
 export enum Provider {
   LOCAL = 'local',
@@ -56,7 +53,7 @@ export class User {
   @Column({ type: 'enum', enum: Provider, default: Provider.LOCAL })
   provider: Provider;
 
-  @Column({ type: 'enum', enum: Role, default: Role.OPER })
+  @Column({ default: '보호자' })
   role: Role;
 
   @ManyToOne(() => Family, (family) => family.users, { nullable: true })

@@ -17,8 +17,8 @@ export class IntakeLog {
   @ManyToOne(() => User, (user) => user.intake_logs)
   user: User;
 
-  @Column({ default: false })
-  is_checked: boolean;
+  @Column({ default: 0 })
+  chekced_percent: number;
 
   @Column('simple-json')
   alarm_confirms: ALARM_CONFIRM[];
