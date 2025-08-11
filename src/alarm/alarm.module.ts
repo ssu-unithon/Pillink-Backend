@@ -16,5 +16,6 @@ import { IntakeLogModule } from 'src/intake-log/intake-log.module';
   ],
   providers: [AlarmService],
   controllers: [AlarmController],
+  exports: [AlarmService],
 })
 export class AlarmModule {}

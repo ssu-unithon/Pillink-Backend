@@ -14,6 +14,7 @@ import { AlarmModule } from './alarm/alarm.module';
 import { Alarm } from './alarm/entity/alarm.entity';
 import { IntakeLogModule } from './intake-log/intake-log.module';
 import { IntakeLog } from './intake-log/entity/intake-log.entity';
+import { AppPushModule } from './app-push/app-push.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { IntakeLog } from './intake-log/entity/intake-log.entity';
     ChatModule,
     AlarmModule,
     IntakeLogModule,
+    AppPushModule,
   ],
   controllers: [AppController],
   providers: [AppService],

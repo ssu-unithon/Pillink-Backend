@@ -12,5 +12,6 @@ import { AlarmModule } from 'src/alarm/alarm.module';
   ],
   providers: [IntakeLogService],
   controllers: [IntakeLogController],
+  exports: [IntakeLogService],
 })
 export class IntakeLogModule {}

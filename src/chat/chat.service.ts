@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/auth/user.service';
 import { CreateChatMessageDTO } from './dto/ChatMessage.dto';
+import { ChatAPIService } from './chat.api.service';
 
 const relations = ['user'];
 
@@ -11,6 +12,7 @@ const relations = ['user'];
 export class ChatService {
   constructor(
     @InjectRepository(ChatMessage) private repo: Repository<ChatMessage>,
+    private apiService: ChatAPIService,
     private userService: UserService,
   ) {}
 
@@ -40,7 +42,14 @@ export class ChatService {
       content,
       sender_type: 'user',
     });
-    // TODO: ChatBot API
-    return message;
+    // ChatBot API
+    const response = await this.apiService.question(content);
+    console.log(response);
+    /*await this.repo.save({
+      user,
+      response,
+      sender_type: 'ai',
+    });*/
+    return response;
   }
 }
