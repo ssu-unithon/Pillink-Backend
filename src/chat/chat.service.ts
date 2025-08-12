@@ -59,8 +59,9 @@ export class ChatService {
   async getRisk(targetId: number) {
     const targetUser = await this.userService.getById(targetId);
     const pill_names: string[] = [];
+    this.logger.debug(`AI risk user ${targetId}`, targetUser);
     targetUser.alarms?.forEach((alarm) => {
-      this.logger.verbose(`AI risk pills ${targetId} +${alarm.name}`);
+      this.logger.debug(`AI risk pills ${targetId} +${alarm.name}`);
       if (alarm.name != '') pill_names.push(alarm.name);
     });
     return await this.apiService.requestRisk(pill_names);
