@@ -52,7 +52,7 @@ export class ChatAPIService {
         return response.data;
       })
       .catch((error) => {
-        console.warn('err2', error._currentUrl, error);
+        console.warn('err2', error._currentUrl);
         throw new BadRequestException(
           `API 요청 실패: ${error.response?.status} ${error.response?.statusText} ${error.response?.data.error}`,
         );

@@ -60,9 +60,9 @@ export class ChatService {
     const targetUser = await this.userService.getById(targetId);
     const pill_names: string[] = [];
     targetUser.alarms?.forEach((alarm) => {
+      this.logger.verbose(`AI risk pills ${targetId} +${alarm.name}`);
       if (alarm.name != '') pill_names.push(alarm.name);
     });
-    this.logger.verbose(`AI risk pills ${pill_names.toString()}`);
     return await this.apiService.requestRisk(pill_names);
   }
 }
