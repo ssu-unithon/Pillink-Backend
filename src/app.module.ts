@@ -14,7 +14,6 @@ import { AlarmModule } from './alarm/alarm.module';
 import { Alarm } from './alarm/entity/alarm.entity';
 import { IntakeLogModule } from './intake-log/intake-log.module';
 import { IntakeLog } from './intake-log/entity/intake-log.entity';
-import { AppPushModule } from './app-push/app-push.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
@@ -40,7 +39,6 @@ import { join } from 'path';
     ChatModule,
     AlarmModule,
     IntakeLogModule,
-    AppPushModule,
   ],
   controllers: [AppController],
   providers: [AppService],

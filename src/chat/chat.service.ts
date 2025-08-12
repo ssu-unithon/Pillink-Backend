@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { ChatMessage } from './entity/ChatMessage.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,6 +15,7 @@ export class ChatService {
     private apiService: ChatAPIService,
     private userService: UserService,
   ) {}
+  private logger = new Logger('Chat');
 
   async findOne(where: import('typeorm').FindOptionsWhere<ChatMessage>) {
     return await this.repo.findOne({ where, relations });
@@ -42,13 +43,16 @@ export class ChatService {
       content: content,
       sender_type: 'user',
     });
+    this.logger.verbose('AI chat [User Message] Saved');
     // ChatBot API
     const response = await this.apiService.question(content);
+    this.logger.verbose('AI chat [Response]');
     await this.repo.save({
       user: { id: userId },
       content: response,
       sender_type: 'ai',
     });
+    this.logger.verbose('AI chat [AI Message] Saved');
     return response;
   }
 
