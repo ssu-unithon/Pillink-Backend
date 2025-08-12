@@ -39,9 +39,9 @@ export class PillService {
       throw new BadRequestException('이미 해당 약을 복용하고 있습니다');
     const pill = await this.repo.save({
       user: { id: user.id },
-      name: itemInfo.itemName,
+      name: itemInfo?.itemName,
       count,
-      itemSeq: itemInfo.itemSeq,
+      itemSeq: itemInfo?.itemSeq,
       is_pined: false,
     });
     if (!user.owned_pills) user.owned_pills = [pill];

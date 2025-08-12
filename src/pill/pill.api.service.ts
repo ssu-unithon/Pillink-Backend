@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import axios from 'axios';
 
 const API_URL =
@@ -84,16 +80,14 @@ export class PillAPIService {
   }
 
   /** 품목기준코드(id)로 검색 */
-  findByItemSeq(pageNo: number, itemSeq: string) {
-    return this.request(pageNo, { itemSeq: itemSeq });
+  async findByItemSeq(pageNo: number, itemSeq: string): Promise<APIResponse> {
+    return await this.request(pageNo, { itemSeq: itemSeq });
   }
 
-  async findOne(itemSeq: string): Promise<ItemInfo> {
+  async findOne(itemSeq: string): Promise<ItemInfo | null> {
     const response = await this.findByItemSeq(1, itemSeq);
-    if (response.totalCount < 1)
-      throw new NotFoundException(
-        `품목기준코드가 '${itemSeq}'인 아이템은 존재하지 않습니다`,
-      );
-    return response.items[0];
+    const item = response.items[0];
+    if (response.totalCount == 0 || item.itemSeq !== itemSeq) return null;
+    return item;
   }
 }

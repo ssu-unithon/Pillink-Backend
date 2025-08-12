@@ -3,8 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Alarm } from './entity/alarm.entity';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/auth/user.service';
-import { CreateAlarmDTO, SaveAlarmDTO } from './dto/alarm.dto';
+import {
+  CreateAlarmDTO,
+  ResponseAlarmAPI,
+  SaveAlarmDTO,
+} from './dto/alarm.dto';
 import { FamilyService } from 'src/family/family.service';
+import { PillAPIService } from 'src/pill/pill.api.service';
 
 const relations = [];
 
@@ -14,6 +19,7 @@ export class AlarmService {
     @InjectRepository(Alarm) private repo: Repository<Alarm>,
     private userService: UserService,
     private familyService: FamilyService,
+    private pillService: PillAPIService,
   ) {}
 
   async findOne(where: import('typeorm').FindOptionsWhere<Alarm>) {
@@ -21,10 +27,20 @@ export class AlarmService {
   }
 
   async getOrderedAlarms(targetId) {
-    return await this.repo.find({
+    const alarms$ = await this.repo.find({
       where: { user: { id: targetId } },
       order: { hour: 'ASC', minute: 'ASC' },
     });
+    const alarms = alarms$ as ResponseAlarmAPI[];
+
+    for (const alarm of alarms) {
+      if (!alarm.itemSeq || alarm.itemSeq == '') {
+        alarm.detail = null;
+      }
+      const detail = await this.pillService.findOne(alarm.itemSeq);
+      alarm.detail = detail;
+    }
+    return alarms;
   }
 
   async save(dto: SaveAlarmDTO): Promise<Alarm> {

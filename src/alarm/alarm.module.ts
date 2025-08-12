@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Alarm } from './entity/alarm.entity';
 import { FamilyModule } from 'src/family/family.module';
 import { IntakeLogModule } from 'src/intake-log/intake-log.module';
+import { PillModule } from 'src/pill/pill.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { IntakeLogModule } from 'src/intake-log/intake-log.module';
     AuthModule,
     FamilyModule,
     IntakeLogModule,
+    PillModule,
   ],
   providers: [AlarmService],
   controllers: [AlarmController],
