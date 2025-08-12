@@ -37,4 +37,8 @@ export class AlarmService {
     const alarm = await this.repo.save({ ...dto, user: targetUser });
     return alarm;
   }
+
+  async update(alarmId: number, hour: number, minute: number) {
+    return this.repo.update(alarmId, { hour, minute });
+  }
 }

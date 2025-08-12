@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Patch,
   Post,
   Query,
   Req,
@@ -31,5 +32,10 @@ export class AlarmController {
   async create(@Req() req: Request, @Body() dto: CreateAlarmDTO) {
     const payload = req.user as Payload;
     return await this.alarmService.makeAlarm(payload.id, dto);
+  }
+
+  @Patch()
+  async update(@Body() dto: { alarmId: number; hour: number; minute: number }) {
+    return await this.alarmService.update(dto.alarmId, dto.hour, dto.minute);
   }
 }

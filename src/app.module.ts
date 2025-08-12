@@ -15,6 +15,8 @@ import { Alarm } from './alarm/entity/alarm.entity';
 import { IntakeLogModule } from './intake-log/intake-log.module';
 import { IntakeLog } from './intake-log/entity/intake-log.entity';
 import { AppPushModule } from './app-push/app-push.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -27,6 +29,10 @@ import { AppPushModule } from './app-push/app-push.module';
       database: process.env.DB_DATABASE,
       entities: [User, Family, Pill, ChatMessage, Alarm, IntakeLog],
       synchronize: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/public', // http://localhost:3000/public/~~ 경로로 제공
     }),
     AuthModule,
     PillModule,
