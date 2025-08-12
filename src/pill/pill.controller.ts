@@ -49,13 +49,14 @@ export class PillController {
   @Post()
   async insertTo(
     @Req() req: Request,
-    @Body() body: { targetId: number; itemSeq: string },
+    @Body() body: { targetId: number; itemSeq: string; count: number },
   ): Promise<Pill> {
     const payload = req.user as Payload;
     return await this.pillService.insertToFamily(
       payload.id,
       body.targetId,
       body.itemSeq,
+      body.count,
     );
   }
 
@@ -63,13 +64,14 @@ export class PillController {
   @Patch()
   async modify(
     @Req() req: Request,
-    @Body() body: { targetId: number; itemSeq: string },
+    @Body() body: { targetId: number; itemSeq: string; count: number },
   ): Promise<Pill> {
     const payload = req.user as Payload;
     return await this.pillService.insertToFamily(
       payload.id,
       body.targetId,
       body.itemSeq,
+      body.count,
     );
   }
 }

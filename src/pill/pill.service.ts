@@ -27,7 +27,11 @@ export class PillService {
     return await this.repo.findOne({ where, relations });
   }
 
-  async insertByItemSeq(userId: number, itemSeq: string): Promise<Pill> {
+  async insertByItemSeq(
+    userId: number,
+    itemSeq: string,
+    count: number,
+  ): Promise<Pill> {
     const user = await this.userService.getById(userId);
     const itemInfo = await this.apiService.findOne(itemSeq);
     // 이미 같은 약이 있디면
@@ -36,7 +40,9 @@ export class PillService {
     const pill = await this.repo.save({
       user: { id: user.id },
       name: itemInfo.itemName,
+      count,
       itemSeq: itemInfo.itemSeq,
+      is_pined: false,
     });
     if (!user.owned_pills) user.owned_pills = [pill];
     else user.owned_pills.push(pill);
@@ -45,9 +51,14 @@ export class PillService {
     return pill;
   }
 
-  async insertToFamily(userId: number, targetUserId: number, itemSeq: string) {
+  async insertToFamily(
+    userId: number,
+    targetUserId: number,
+    itemSeq: string,
+    count: number,
+  ) {
     await this.familyService.hasRelationship(userId, targetUserId);
-    return await this.insertByItemSeq(targetUserId, itemSeq);
+    return await this.insertByItemSeq(targetUserId, itemSeq, count);
   }
 
   async getOwnedPills(userId: number) {
