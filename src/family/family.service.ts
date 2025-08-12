@@ -96,7 +96,7 @@ export class FamilyService {
     const ordered = await this.userService.getById(orderedId);
     const family = await this.findByUID(commander.id);
     // 조건 1 : 실행자는 권한을 가지고 있는가
-    if (onlyManager && commander.role === '보호자')
+    if (onlyManager && commander.role !== '보호자')
       throw new ForbiddenException(
         '가족 관리자만 관리 기능에 접근할 수 있습니다',
       );
