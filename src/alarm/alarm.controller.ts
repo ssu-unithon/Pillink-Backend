@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   Patch,
   Post,
   Query,
@@ -17,6 +18,7 @@ import { Payload } from 'src/auth/security/payload.interface';
 @Controller('alarm')
 export class AlarmController {
   constructor(private alarmService: AlarmService) {}
+  private logger = new Logger('Alarm');
 
   @Get()
   @UseGuards(LoginGuard)
@@ -31,11 +33,13 @@ export class AlarmController {
   @UseGuards(LoginGuard)
   async create(@Req() req: Request, @Body() dto: CreateAlarmDTO) {
     const payload = req.user as Payload;
+    this.logger.verbose(`${payload.email} ${dto.hour}:${dto.minute} 알림 생성`);
     return await this.alarmService.makeAlarm(payload.id, dto);
   }
 
   @Patch()
   async update(@Body() dto: { alarmId: number; hour: number; minute: number }) {
+    this.logger.verbose(`${dto.alarmId} ${dto.hour}:${dto.minute} 알림 수정`);
     return await this.alarmService.update(dto.alarmId, dto.hour, dto.minute);
   }
 }

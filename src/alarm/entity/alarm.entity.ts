@@ -25,4 +25,10 @@ export class Alarm {
 
   @Column({ default: true })
   is_enabled: boolean;
+
+  @Column()
+  itemSeq: string;
+
+  @Column()
+  image_url: string;
 }

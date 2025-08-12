@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Controller,
   Get,
+  Logger,
   Post,
   Query,
   Req,
@@ -15,6 +16,7 @@ import { Payload } from 'src/auth/security/payload.interface';
 @Controller('family')
 export class FamilyController {
   constructor(private famliyService: FamilyService) {}
+  private logger = new Logger('Family');
 
   @Get()
   @UseGuards(LoginGuard)
@@ -34,6 +36,7 @@ export class FamilyController {
   @UseGuards(LoginGuard)
   async leave(@Req() req: Request) {
     const payload = req.user as Payload;
+    this.logger.verbose(`${payload.email} 그룹 탈퇴`);
     return await this.famliyService.leave(payload.id);
   }
 
@@ -43,6 +46,7 @@ export class FamilyController {
     if (!targetPhone)
       throw new BadRequestException('검색할 전화번호를 입력하세요');
     const payload = req.user as Payload;
+    this.logger.verbose(`${payload.email} ${targetPhone} 그룹 초대`);
     return await this.famliyService.insert(payload.id, targetPhone);
   }
 }

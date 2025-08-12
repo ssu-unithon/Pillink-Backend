@@ -51,4 +51,10 @@ export class ChatService {
     });
     return response;
   }
+
+  async getRisk(targetId: number) {
+    const targetUser = await this.userService.getById(targetId);
+    const pills: string[] = [];
+    targetUser.owned_pills?.forEach((pill) => pills.push(pill.name));
+  }
 }

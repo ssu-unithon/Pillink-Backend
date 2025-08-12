@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   Post,
   Query,
   Req,
@@ -17,6 +18,7 @@ import { IntakeLogService } from './intake-log.service';
 @Controller('intake-log')
 export class IntakeLogController {
   constructor(private intakeLogService: IntakeLogService) {}
+  private logger = new Logger('Intake');
 
   @Get()
   @UseGuards(LoginGuard)
@@ -34,6 +36,7 @@ export class IntakeLogController {
   @UseGuards(LoginGuard)
   async check(@Req() req: Request, @Body() dto: CheckIntakeDTO) {
     const payload = req.user as Payload;
+    this.logger.verbose(`${payload.email} ${dto.date}-${dto.date} 알림 확인`);
     return await this.intakeLogService.check(
       payload.id,
       dto.month,

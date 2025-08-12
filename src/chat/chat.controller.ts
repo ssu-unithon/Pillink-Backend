@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { LoginGuard } from 'src/auth/security/auth.guard';
 import { Request } from 'express';
@@ -7,6 +15,7 @@ import { Payload } from 'src/auth/security/payload.interface';
 @Controller('chat')
 export class ChatController {
   constructor(private chatService: ChatService) {}
+  private logger = new Logger('Chat');
 
   @Get('history')
   @UseGuards(LoginGuard)

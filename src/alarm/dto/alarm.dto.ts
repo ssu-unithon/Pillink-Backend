@@ -13,7 +13,8 @@ export interface CreateAlarmDTO {
   targetId: number;
   hour: number;
   minute: number;
-  is_enabled?: boolean;
   name: string;
   count: number;
+  itemSeq: string;
+  imgage_url: string;
 }
