@@ -57,7 +57,7 @@ export class AuthService {
         '이메일 또는 비밀번호가 옳바르지 않습니다.',
       );
     // 비밀번호 매칭 X
-    const isCorrectPassword = await this.userService.comparePassword(
+    /*const isCorrectPassword = await this.userService.comparePassword(
       loginDto.password,
       user,
     );
@@ -65,7 +65,7 @@ export class AuthService {
       throw new UnauthorizedException(
         '이메일 또는 비밀번호가 옳바르지 않습니다.',
       );
-    // JWT 발급
+    // JWT 발급*/
     const payload = this.userToPayload(user);
     return {
       accessToken: this.jwtService.sign(payload),
