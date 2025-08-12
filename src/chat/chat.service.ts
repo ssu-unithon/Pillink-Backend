@@ -54,7 +54,10 @@ export class ChatService {
 
   async getRisk(targetId: number) {
     const targetUser = await this.userService.getById(targetId);
-    const pills: string[] = [];
-    targetUser.owned_pills?.forEach((pill) => pills.push(pill.name));
+    const pill_names: string[] = [];
+    targetUser.alarms?.forEach((alarm) => {
+      if (alarm.name != '') pill_names.push(alarm.name);
+    });
+    return await this.apiService.requestRisk(pill_names);
   }
 }

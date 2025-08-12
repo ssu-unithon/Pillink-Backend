@@ -4,6 +4,7 @@ import {
   Get,
   Logger,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -29,5 +30,10 @@ export class ChatController {
   async chat(@Req() req: Request, @Body() body: { content: string }) {
     const payload = req.user as Payload;
     return await this.chatService.chat(payload.id, body.content);
+  }
+
+  @Get('risk')
+  async getRisk(@Query('targetId') targetId: number) {
+    return await this.chatService.getRisk(targetId);
   }
 }

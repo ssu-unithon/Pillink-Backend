@@ -1,11 +1,23 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import axios from 'axios';
 
-interface APIResponse {
+export interface ChatAPIResponse {
   answer: string;
   medicine_info: undefined | string | { error: string };
   question: string;
   score: number;
+}
+
+export interface RiskAPIResponse {
+  count: number;
+  collisionCount: number;
+  collisions: string[];
+  duplicateCount: number;
+  duplicates: string[];
+  errors: [];
+  pairCount: number;
+  riskRate: number;
+  warnings: { ingredient: string; reason: string; type: string }[];
 }
 
 const API_URL = process.env.CHATBOT_ADDRESS;
@@ -14,7 +26,7 @@ const API_URL = process.env.CHATBOT_ADDRESS;
 export class ChatAPIService {
   constructor() {}
 
-  async requestChat(content: string): Promise<APIResponse> {
+  async requestChat(content: string): Promise<ChatAPIResponse> {
     const url = `${API_URL}/inquiry_answer?corpus=${content}`;
 
     return axios
@@ -27,15 +39,18 @@ export class ChatAPIService {
       });
   }
 
-  async requestRisk(): Promise<APIResponse> {
+  async requestRisk(pill_names: string[]): Promise<RiskAPIResponse> {
     const url = `${API_URL}/ingredient_risk`;
-
     return axios
-      .post(url)
-      .then((response) => response.data.body)
+      .post(url, {
+        ingredients: pill_names,
+      })
+      .then((response) => {
+        return response.data;
+      })
       .catch((error) => {
         throw new BadRequestException(
-          `API 요청 실패: ${error.response?.status} ${error.response?.statusText}`,
+          `API 요청 실패: ${error.response?.status} ${error.response?.statusText} ${error.response?.data}`,
         );
       });
   }
