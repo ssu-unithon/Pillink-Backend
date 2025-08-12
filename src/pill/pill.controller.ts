@@ -66,14 +66,9 @@ export class PillController {
   async modify(
     @Req() req: Request,
     @Body() body: { targetId: number; itemSeq: string; count: number },
-  ): Promise<Pill> {
+  ) {
     const payload = req.user as Payload;
     this.logger.verbose(`${payload.email} '${body.itemSeq}' 약물 수정`);
-    return await this.pillService.insertToFamily(
-      payload.id,
-      body.targetId,
-      body.itemSeq,
-      body.count,
-    );
+    return await this.pillService.update(body);
   }
 }

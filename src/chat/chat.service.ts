@@ -45,8 +45,8 @@ export class ChatService {
     // ChatBot API
     const response = await this.apiService.question(content);
     await this.repo.save({
-      user,
-      response,
+      user: { id: userId },
+      content: response,
       sender_type: 'ai',
     });
     return response;

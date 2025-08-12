@@ -73,4 +73,11 @@ export class PillService {
       throw new ForbiddenException('해당 사용자는 같은 그룹이 아닙니다');
     return targetUser.owned_pills;
   }
+
+  async update(body: { targetId: number; itemSeq: string; count: number }) {
+    return await this.repo.update(body.targetId, {
+      itemSeq: body.itemSeq,
+      count: body.count,
+    });
+  }
 }

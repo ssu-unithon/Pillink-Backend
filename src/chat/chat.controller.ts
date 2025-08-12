@@ -29,11 +29,13 @@ export class ChatController {
   @UseGuards(LoginGuard)
   async chat(@Req() req: Request, @Body() body: { content: string }) {
     const payload = req.user as Payload;
-    return await this.chatService.chat(payload.id, body.content);
+    this.logger.verbose(`AI chat '${body.content}'`);
+    return { content: await this.chatService.chat(payload.id, body.content) };
   }
 
   @Get('risk')
   async getRisk(@Query('targetId') targetId: number) {
+    this.logger.verbose('AI risk 조회');
     return await this.chatService.getRisk(targetId);
   }
 }

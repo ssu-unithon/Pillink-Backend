@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export interface ChatAPIResponse {
   answer: string;
-  medicine_info: undefined | string | { error: string };
+  medicine_info: undefined | string;
   question: string;
   score: number;
 }
@@ -31,8 +31,11 @@ export class ChatAPIService {
 
     return axios
       .get(url)
-      .then((response) => response.data.body)
+      .then((response) => {
+        return response.data;
+      })
       .catch((error) => {
+        console.log('err', error);
         throw new BadRequestException(
           `API 요청 실패: ${error.response?.status} ${error.response?.statusText}`,
         );

@@ -17,7 +17,7 @@ export class ChatMessage {
   @ManyToOne(() => User, (user) => user.chat_messages)
   user: User;
 
-  @Column('text')
+  @Column()
   content: string;
 
   @Column({ default: 'ai' })
