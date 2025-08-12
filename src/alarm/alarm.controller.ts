@@ -38,8 +38,21 @@ export class AlarmController {
   }
 
   @Patch()
-  async update(@Body() dto: { alarmId: number; hour: number; minute: number }) {
+  async update(
+    @Body()
+    dto: {
+      alarmId: number;
+      hour: number;
+      minute: number;
+      count: number;
+    },
+  ) {
     this.logger.verbose(`${dto.alarmId} ${dto.hour}:${dto.minute} 알림 수정`);
-    return await this.alarmService.update(dto.alarmId, dto.hour, dto.minute);
+    return await this.alarmService.update(
+      dto.alarmId,
+      dto.hour,
+      dto.minute,
+      dto.count,
+    );
   }
 }

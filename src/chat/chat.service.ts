@@ -36,10 +36,10 @@ export class ChatService {
   async chat(userId: number, content: string) {
     if (!content || content.replaceAll(' ', '').length < 2)
       throw new BadRequestException('내용을 입력해주세요');
-    const user = await this.userService.getById(userId);
+    await this.userService.getById(userId);
     await this.repo.save({
-      user,
-      content,
+      user: { id: userId },
+      content: content,
       sender_type: 'user',
     });
     // ChatBot API

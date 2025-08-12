@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import axios from 'axios';
 
 export interface ChatAPIResponse {
-  answer: string;
+  result: string;
   medicine_info: undefined | string;
   question: string;
   score: number;
@@ -35,7 +35,7 @@ export class ChatAPIService {
         return response.data;
       })
       .catch((error) => {
-        console.log('err', error);
+        console.warn('err', error._currentUrl, error);
         throw new BadRequestException(
           `API 요청 실패: ${error.response?.status} ${error.response?.statusText}`,
         );
@@ -52,6 +52,7 @@ export class ChatAPIService {
         return response.data;
       })
       .catch((error) => {
+        console.warn('err2', error._currentUrl, error);
         throw new BadRequestException(
           `API 요청 실패: ${error.response?.status} ${error.response?.statusText} ${error.response?.data}`,
         );
@@ -60,9 +61,10 @@ export class ChatAPIService {
 
   async question(content: string) {
     const response = await this.requestChat(content);
+    console.log(response);
     if (response.medicine_info) {
       return response.medicine_info;
     }
-    return response.answer;
+    return response.result;
   }
 }

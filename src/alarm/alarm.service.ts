@@ -54,7 +54,7 @@ export class AlarmService {
     return alarm;
   }
 
-  async update(alarmId: number, hour: number, minute: number) {
+  async update(alarmId: number, hour: number, minute: number, count: number) {
     return this.repo.update(alarmId, { hour, minute });
   }
 }
