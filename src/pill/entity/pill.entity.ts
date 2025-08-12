@@ -15,6 +15,9 @@ export class Pill {
   @Column()
   name: string;
 
+  @Column()
+  count: number;
+
   @Column({ default: false })
   is_pined: boolean;
 }

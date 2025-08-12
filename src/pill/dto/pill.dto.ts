@@ -5,4 +5,5 @@ export interface CreatePillDTO {
   user: User;
   itemSeq: string;
   name: string;
+  number: number;
 }
