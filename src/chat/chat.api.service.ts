@@ -54,7 +54,7 @@ export class ChatAPIService {
       .catch((error) => {
         console.warn('err2', error._currentUrl, error);
         throw new BadRequestException(
-          `API 요청 실패: ${error.response?.status} ${error.response?.statusText} ${error.response?.data}`,
+          `API 요청 실패: ${error.response?.status} ${error.response?.statusText} ${error.response?.data.error}`,
         );
       });
   }

@@ -62,6 +62,7 @@ export class ChatService {
     targetUser.alarms?.forEach((alarm) => {
       if (alarm.name != '') pill_names.push(alarm.name);
     });
+    this.logger.verbose(`AI risk pills ${pill_names.toString()}`);
     return await this.apiService.requestRisk(pill_names);
   }
 }
